@@ -123,6 +123,7 @@ const getSeverity = (status) => {
         <span>17.321 resultados encontrados</span>
     </div>
     <Carousel class="mx-5" :value="products" :numVisible="5" :numScroll="5" :responsiveOptions="carouselResponsiveOptions">
+        <div></div>
         <template #item="slotProps">
             <div class="border-1 surface-border border-round w-auto m-2 ">
                 <div class="mb-3">

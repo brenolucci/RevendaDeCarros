@@ -115,7 +115,7 @@ const products = ref([
             </div>
         </div>
     </div>
-    <hr class="mt-5 mb-3"/>
+    <hr class="mt-5 mb-5"/>
     <!--  -->
     <!-- Carros -->
     <div>

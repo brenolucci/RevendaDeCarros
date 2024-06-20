@@ -115,7 +115,7 @@ const products = ref([
             </div>
         </div>
     </div>
-    <hr class="mt-5 mb-3"/>
+    <hr class="mt-5 mb-5"/>
     <!--  -->
     <!-- Carros -->
     <div>
@@ -131,7 +131,7 @@ const products = ref([
         </div>
     </div>
     </div>
-    <hr class="mt-5 mb-3"/>
+    <hr class="mt-5 mb-5"/>
     <!--  -->
     <!-- Ano -->
     <div>
@@ -147,7 +147,7 @@ const products = ref([
             </div>
         </div>
     </div>
-    <hr class="mt-5 mb-3"/>
+    <hr class="mt-5 mb-5"/>
     <!--  -->
     <!-- Preço -->
     <div>
@@ -163,7 +163,7 @@ const products = ref([
             </div>
         </div>
     </div>
-    <hr class="mt-5 mb-3"/>
+    <hr class="mt-5 mb-5"/>
     <!--  -->
     <!-- Quilometragem -->
     <div>

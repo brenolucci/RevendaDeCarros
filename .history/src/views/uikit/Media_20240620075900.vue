@@ -117,11 +117,8 @@ const getSeverity = (status) => {
 </script>
 
 <template>
-    <Breadcrumb class="mb-5" :home="home" :model="items" />
-    <div class="mb-5 ml-5">
-        <h1 class="text-xl font-semibold font" >Carros usados, seminovos e novos em Florianópolis/SC</h1>
-        <span>17.321 resultados encontrados</span>
-    </div>
+    <Breadcrumb class="mb-10" :home="home" :model="items" />
+    
     <Carousel class="mx-5" :value="products" :numVisible="5" :numScroll="5" :responsiveOptions="carouselResponsiveOptions">
         <template #item="slotProps">
             <div class="border-1 surface-border border-round w-auto m-2 ">

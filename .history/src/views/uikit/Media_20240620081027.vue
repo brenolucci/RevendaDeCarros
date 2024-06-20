@@ -123,32 +123,34 @@ const getSeverity = (status) => {
         <span>17.321 resultados encontrados</span>
     </div>
     <Carousel class="mx-5" :value="products" :numVisible="5" :numScroll="5" :responsiveOptions="carouselResponsiveOptions">
-        <template #item="slotProps">
-            <div class="border-1 surface-border border-round w-auto m-2 ">
-                <div class="mb-3">
-                    <div class="relative mx-auto">
-                        <img :src="Skyline" :alt="product.data[0].name" class="w-full" />
-                        <Tag :value="product.data[0].inventoryStatus" :severity="true" class="absolute" style="left: 3px; top: 5px" />
-                    </div>
-                </div>
-                <div class="p-3">
-
-                    <div class="mb-2 font-semibold">{{ product.data[0].name }}</div>
-                    <span class="mb-30">R34 GTR Vspec Rays Nismo LM 19x10.5J </span>
-                    <div class="justify-content-between align-items-center mb-2">
-                        <div class="mt-3 font-semibold text-xl">${{ product.data[0].price }}</div>
-                        <div class="flex justify-content-between align-items-center mb-2">
-                            <span>2000/2001</span>
-                            <span>60.000KM</span>
+        <div>
+            <template #item="slotProps">
+                <div class="border-1 surface-border border-round w-auto m-2 ">
+                    <div class="mb-3">
+                        <div class="relative mx-auto">
+                            <img :src="Skyline" :alt="product.data[0].name" class="w-full" />
+                            <Tag :value="product.data[0].inventoryStatus" :severity="true" class="absolute" style="left: 3px; top: 5px" />
                         </div>
-                        <span class="flex justify-center">
-                            <Button class="mx-6 mt-4 mb-2">Ver detalhes</Button>
-                        </span>
-                        <hr/>
-                        <span class="flex justify-center">Florianópolis - SC</span>
+                    </div>
+                    <div class="p-3">
+    
+                        <div class="mb-2 font-semibold">{{ product.data[0].name }}</div>
+                        <span class="mb-30">R34 GTR Vspec Rays Nismo LM 19x10.5J </span>
+                        <div class="justify-content-between align-items-center mb-2">
+                            <div class="mt-3 font-semibold text-xl">${{ product.data[0].price }}</div>
+                            <div class="flex justify-content-between align-items-center mb-2">
+                                <span>2000/2001</span>
+                                <span>60.000KM</span>
+                            </div>
+                            <span class="flex justify-center">
+                                <Button class="mx-6 mt-4 mb-2">Ver detalhes</Button>
+                            </span>
+                            <hr/>
+                            <span class="flex justify-center">Florianópolis - SC</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </template>
-    </Carousel>
+            </template>
+        </Carousel>
+        </div>
 </template>

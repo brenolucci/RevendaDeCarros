@@ -124,7 +124,7 @@ const getSeverity = (status) => {
     </div>
     <Carousel class="mx-5" :value="products" :numVisible="5" :numScroll="5" :responsiveOptions="carouselResponsiveOptions">
         <template #item="slotProps">
-            <div class="border-1 surface-border border-round w-auto m-2 ">
+            <div class="grid border-1 surface-border border-round w-auto m-2 ">
                 <div class="mb-3">
                     <div class="relative mx-auto">
                         <img :src="Skyline" :alt="product.data[0].name" class="w-full" />

@@ -71,12 +71,12 @@ const products = ref([
             <InputText class="border w-full py-2 px-2" placeholder="florianópolis" />
         </IconField>
     </div>
-    <hr class="mt-5 mb-5"/>
+    <hr class="mt-5 mb-3"/>
     <!--  -->
     <!-- LogoMarcas -->
     <div class="grid grid-cols-4 gap-4">
     </div>
-    <h6 class="mt-2 mb-5">Marca</h6>
+    <h6 class="mt-2 mb-3">Marca</h6>
     <div class="grid grid-cols-3 gap-1">
         <div>
             <div class="shadow-sm border rounded flex flex-column items-center justify-items-center">
