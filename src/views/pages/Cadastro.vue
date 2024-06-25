@@ -12,9 +12,9 @@ const versoes = ref({});
 const product = ref({});
 const submitted = ref(false);
 const statuses = ref([]);
-const marcas = ref({});
+const marcas = ref([]);
 const marcaSelecionada = ref();
-const modelos = ref({});
+const modelos = ref([]);
 const modeloSelecionado = ref({});
 const marcaId = ref();
 
@@ -138,11 +138,11 @@ onMounted(() => {
                     <ImageUploader></ImageUploader>
                     <div class="field">
                         <label for="id" class="mb-3">MARCA</label>
-                        <Dropdown class="border w-full" id="id" v-model="marcaSelecionada" :options="marcas" optionLabel="nome" placeholder="Selecione a Marca" @change="marcaEscolhida" />
+                        <Dropdown class="border w-full" v-model="marcaSelecionada" :options="marcas" optionLabel="nome" placeholder="Selecione a Marca" @change="marcaEscolhida" />
                     </div>
                     <div class="field">
                         <label for="inventoryStatus" class="mb-3">MODELO</label>
-                        <Dropdown class="border w-full" id="inventoryStatus" v-model="modeloSelecionado" :options="modelos" optionLabel="nome" placeholder="Selecione o Modelo">
+                        <Dropdown class="border w-full" v-model="modeloSelecionado" :options="modelos" optionLabel="nome" placeholder="Selecione o Modelo">
                         </Dropdown>
                     </div>
                     <img :src="'/demo/images/product/' + product.image" :alt="product.image" v-if="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
