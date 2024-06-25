@@ -5,7 +5,6 @@ import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
 import InputText from 'primevue/inputtext';
 
-
 const isLoading = ref(false)
 const products = ref([
 		{
@@ -65,7 +64,6 @@ const opcionais = ref({
     ArQuente: true,
     DirecaoEletrica: true
 })
-
 </script>
 
 <template>
@@ -213,6 +211,4 @@ const opcionais = ref({
         </div>
     </div>
     <hr class="mt-5 mb-5"/>
-
-
 </template>

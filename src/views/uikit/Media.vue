@@ -6,9 +6,7 @@ import { ProductService } from '@/service/ProductService'
 
 const images = ref([]);
 const versoes = ref([]);
-
 const productService = new ProductService();
-
 const carouselResponsiveOptions = ref([
     {
         breakpoint: '1024px',
@@ -26,7 +24,6 @@ const carouselResponsiveOptions = ref([
         numScroll: 1
     }
 ]);
-
 const home = ref({
     icon: 'pi pi-home'
 });
