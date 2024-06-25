@@ -20,8 +20,8 @@ const marcaId = ref();
 
 
 function marcaEscolhida() {
-    modelos.value = {};
-    modeloSelecionado.value = {};
+    
+    console.log(marcaSelecionada.value)
     marcaId.value = marcaSelecionada.value.id;
     productService.buscarModelosPorMarca(marcaId.value).then((data) => (modelos.value = data));
 }
