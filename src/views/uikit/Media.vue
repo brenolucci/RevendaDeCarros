@@ -34,7 +34,7 @@ const items = ref([
 ]);
 
 onMounted(() => {
-    productService.getVersions().then((data) => (versoes.value = data));
+    productService.buscarVersoes().then((data) => (versoes.value = data));
 });
 
 const getSeverity = (status) => {
@@ -61,7 +61,6 @@ const getSeverity = (status) => {
         <span>17.321 resultados encontrados</span>
     </div>
     <div class="grid grid-cols-4">
-
         <div v-for="versao in versoes" :key="versao.id" >
             <div class="border-1 surface-border border-round w-auto m-2 ">
                 <div class="mb-3">

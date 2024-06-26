@@ -1,5 +1,38 @@
 export class ProductService {
+
+    async cadastrarVersao(body) {
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: {"content-type": "application/json"},
+            body: JSON.stringify(body)
+        };
+        const response = await fetch("http://localhost/revendaCarro/hmtl/src/controllers/CadastrarVersao.php", requestOptions);
+        const data = await response.json();
+        
+        return data;
+    }
     
+    async buscarOpcionais() {
+        const requestOptions = {
+            method: "GET",
+            headers: {"content-type": "application/json"},
+        };
+        const response = await fetch('http://localhost/revendaCarro/hmtl/src/controllers/BuscarOpcionais.php', requestOptions);
+        const data = await response.json();
+    
+        return data;
+    }
+    async buscarCombustiveis() {
+        const requestOptions = {
+            method: "GET",
+            headers: {"content-type": "application/json"},
+        };
+        const response = await fetch('http://localhost/revendaCarro/hmtl/src/controllers/BuscarCombustiveis.php', requestOptions);
+        const data = await response.json();
+    
+        return data;
+    }
     async buscarVersoes() {
         const requestOptions = {
             method: "GET",
