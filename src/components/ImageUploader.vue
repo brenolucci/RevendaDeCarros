@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { usePrimeVue } from 'primevue/config';
 import { useToast } from "primevue/usetoast";
@@ -10,31 +10,38 @@ const totalSize = ref(0);
 const totalSizePercent = ref(0);
 const files = ref([]);
 
-const onRemoveTemplatingFile = (file, removeFileCallback, index) => {
+
+interface Event {
+    files: Array<File>,
+    originalEvent: any
+}
+
+const onRemoveTemplatingFile = (file: { size: any; }, removeFileCallback: (arg0: any) => void, index: any) => {
     removeFileCallback(index);
     totalSize.value -= parseInt(formatSize(file.size));
     totalSizePercent.value = totalSize.value / 10;
 };
 
-const onClearTemplatingUpload = (clear) => {
+const onClearTemplatingUpload = (clear: () => void) => {
     clear();
     totalSize.value = 0;
     totalSizePercent.value = 0;
 };
 
 const onSelectedFiles = (event) => {
+    console.log(event)
     files.value = event.files;
     files.value.forEach((file) => {
         totalSize.value += parseInt(formatSize(file.size));
     });
 };
 
-const uploadEvent = (callback) => {
+const uploadEvent = (callback: () => void) => {
     totalSizePercent.value = totalSize.value / 10;
     callback();
 };
 
-const onTemplatedUpload = async () => {
+const onTemplatedUpload = async ($event: any) => {
     const formData = new FormData();
     files.value.forEach(file => {
         formData.append('files[]', file);
@@ -58,19 +65,20 @@ const onTemplatedUpload = async () => {
     }
 };
 
-const formatSize = (bytes) => {
+const formatSize = (bytes: number) => {
     const k = 1024;
     const dm = 3;
-    const sizes = $primevue.config.locale.fileSizeTypes;
+    if($primevue.config.locale != undefined){
+        const sizes = $primevue.config.locale.fileSizeTypes;
 
-    if (bytes === 0) {
-        return `0 ${sizes[0]}`;
+        if (bytes === 0) {
+            return `0 ${sizes[0]}`;
+        }
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+    
+        return `${formattedSize} ${sizes[i]}`;
     }
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-    return `${formattedSize} ${sizes[i]}`;
 };
 </script>
 
@@ -128,4 +136,4 @@ const formatSize = (bytes) => {
             </template>
         </FileUpload>
     </div>
-</template>
+</template>: () => void: number

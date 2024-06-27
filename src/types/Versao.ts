@@ -1,9 +1,10 @@
-import type Modelo from '@types/Modelo';
-import type Combustivel from '@types/Combustivel';
+import type Modelo from './Modelo';
+import type Combustivel from './Combustivel';
 
-export interface Versao {
-    modelo_id: Modelo,
-    combustivel_id: Combustivel,
+export default interface Versao {
+    id?: number,
+    modelo: Modelo,
+    combustivel: Combustivel,
     nome: string,
     preco: number,
     ano: number,

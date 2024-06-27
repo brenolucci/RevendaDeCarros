@@ -1,6 +1,8 @@
+import type { Versao } from "@/types/Versao";
+
 export class ProductService {
 
-    async cadastrarVersao(body) {
+    async cadastrarVersao(body: Versao) {
         
         const requestOptions = {
             method: 'POST',
@@ -55,7 +57,7 @@ export class ProductService {
         return data;
     }
 
-    async buscarModelosPorMarca(marcaId) {
+    async buscarModelosPorMarca(marcaId: number) {
         const requestOptions = {
             method: 'GET',
             headers: {"content-type": "application/json"},
