@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, toRaw, watchEffect } from 'vue';
+import { onMounted, ref, toRaw} from 'vue';
 import { ProductService } from '@/service/ProductService';
 import Button from 'primevue/button';
 import { useToast } from "primevue/usetoast";
@@ -9,7 +9,7 @@ import type Marca from '@/types/Marca';
 import type Modelo from '@/types/Modelo';
 import type Combustivel from '@/types/Combustivel';
 import type Opcional from '@/types/Opcional';
-import type Cadastro from '@/types/Cadastro';
+import Empty from './Empty.vue';
 
 const productService = new ProductService();
 const versoes = ref<Array<Versao>>([]);
@@ -30,20 +30,16 @@ const preco = ref();
 const quilometragem = ref<String>();
 const localizacao = ref<String>();
 const toast = useToast();
-const versaoMontada = ref<Cadastro>();
 const anos = ref<Array<Number>>([]);
 const files = ref();
-const subida = ref(false)
 
 interface Event {
-    files: Array<File>,   
+    files: Array<File>,
     xhr: any
 }
 
 function onAdvancedUpload(event: Event) {
     files.value = toRaw(event.files);
-    subida.value = true;
-    console.log(subida.value)
     toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
 
@@ -76,29 +72,18 @@ function cadastrar() {
         formData.append('quilometragem', String(quilometragem.value).toString());
         formData.append('localizacao', String(localizacao.value));
         formData.append('opcionais', String(opcionaisId));
+
+        if(!files.value){
+        toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 6000 });
+        throw new Error("Por favor faça o upload das imagens!");
+        }
+      
+        
+        
         files.value.forEach((file: string | Blob) => {
         formData.append('files[]', file);
     });
-
-     if(subida.value === false) {  
-            toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 3000 });
-            throw new Error("Por favor faça o upload das imagens!");
-            
-        }
         productService.cadastrarVersao(formData);
-    //  fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', {
-    //     method: 'POST',
-    //     body: formData
-    // });
-
-        // if(subida.value === false) {
-        //     toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 3000 });
-        //     throw new Error("Por favor faça o upload das imagens!");
-            
-        // }
-        
-        // const response = productService.cadastrarVersao(versaoMontada.value, imagens);
-
         toast.add({ severity: "success", summary: "Successo", detail: "Carro cadastrado!", life: 3000 });
     } catch (error) {
         toast.add({ severity: "error", summary: "Erro", detail: "Houve um problema!", life: 3000 });
