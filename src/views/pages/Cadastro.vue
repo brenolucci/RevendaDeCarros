@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref, type Ref } from 'vue';
+import { onMounted, ref, toRaw, watchEffect } from 'vue';
 import { ProductService } from '@/service/ProductService';
-import ImageUploader from '@/components/ImageUploader.vue';
-import RadioButton from 'primevue/radiobutton';
 import Button from 'primevue/button';
 import { useToast } from "primevue/usetoast";
+// import ImageUploader from '@/components/ImageUploader.vue';
 import type Versao from '@/types/Versao'
 import type Marca from '@/types/Marca';
 import type Modelo from '@/types/Modelo';
 import type Combustivel from '@/types/Combustivel';
 import type Opcional from '@/types/Opcional';
-import Empty from './Empty.vue';
+import type Cadastro from '@/types/Cadastro';
 
 const productService = new ProductService();
 const versoes = ref<Array<Versao>>([]);
@@ -24,16 +23,28 @@ const marcaId = ref();
 const combustiveis = ref<Array<Combustivel>>([]);
 const combustivelSelecionado = ref<Combustivel>();
 const opcionais = ref<Array<Opcional>>([]);
-const opcionalSelecionado = ref<Opcional>();
+const opcionaisSelecionados = ref<Array<Opcional>>([]);
 const ano = ref();
 const anoModelo = ref();
 const preco = ref();
 const quilometragem = ref<String>();
 const localizacao = ref<String>();
 const toast = useToast();
-const versaoMontada = ref();
+const versaoMontada = ref<Cadastro>();
 const anos = ref<Array<Number>>([]);
+const files = ref();
+const subida = ref(false)
 
+interface Event {
+    files: Array<File>,
+    xhr: any
+}
+
+function onAdvancedUpload(event: Event) {
+    files.value = toRaw(event.files);
+    subida.value = true;
+    toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+};
 
 function marcaEscolhida() {
     modelos.value = [];
@@ -51,23 +62,40 @@ function contaAnos() {
 
 function cadastrar() {
     try{
-    versaoMontada.value = {
-            modelo_id: !modeloSelecionado.value ? null : modeloSelecionado.value.id,
-            combustivel_id: !combustivelSelecionado.value ? null : combustivelSelecionado.value.id,
-            nome: versao.value,
-            preco: preco.value,
-            ano: ano.value,
-            ano_modelo: anoModelo.value,
-            quilometragem: String(quilometragem.value).toString(),
-            localizacao: String(localizacao.value)
+        const formData = new FormData();
+        files.value.forEach((file: string | Blob) => {
+        formData.append('files[]', file);
+        // Append do resto do form
+        // formData.append('modelo_id', modeloSelecionado.value.id);
+        // formData.append('combustivel_id', combustivelSelecionado.value.id);
+        formData.append('nome', versao.value);
+        formData.append('preco', preco.value);
+        formData.append('ano', ano.value);
+        formData.append('ano_modelo', anoModelo.value);
+        formData.append('quilometragem', String(quilometragem.value).toString());
+        formData.append('localizacao', String(localizacao.value));
+        // formData.append('opcionais', opcionaisSelecionados.value);
+    });
+
+     if(subida.value === false) {  
+            toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 3000 });
+            throw new Error("Por favor faça o upload das imagens!");
+            
         }
+        productService.cadastrarVersao(formData);
+    //  fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', {
+    //     method: 'POST',
+    //     body: formData
+    // });
+
+        // if(subida.value === false) {
+        //     toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 3000 });
+        //     throw new Error("Por favor faça o upload das imagens!");
+            
+        // }
         
-        if(versaoMontada.value.modelo_id === null || versaoMontada.value.combustivel_id === null || versaoMontada.value.ano === undefined || versaoMontada.value.ano_modelo === undefined || versaoMontada.value.preco === undefined || versaoMontada.value.quilometragem === "undefined" ) {
-            toast.add({ severity: "error", summary: "Erro", detail: "Preencha todos os campos!", life: 5000 })
-            throw new Error("Preencha todos os campos!!");
-        }
-    
-        productService.cadastrarVersao(versaoMontada.value);
+        // const response = productService.cadastrarVersao(versaoMontada.value, imagens);
+
         toast.add({ severity: "success", summary: "Successo", detail: "Carro cadastrado!", life: 3000 });
     } catch (error) {
         toast.add({ severity: "error", summary: "Erro", detail: "Houve um problema!", life: 3000 });
@@ -108,14 +136,10 @@ onMounted(() => {
             <div class="field">
                 <label for="quantity" class="mb-3">ANO DO CARRO</label>
                 <Dropdown class="border flex" v-model="ano" :options="anos" optionLabel="" placeholder="Selecione o Ano" required />
-<!-- 
-                <InputNumber class="rounded border flex" id="quantity" v-model="ano" :min="0" :max="2024" integeronly :allowEmpty="false" /> -->
             </div>
             <div class="field">
                 <label for="name" class="mb-3">ANO DO MODELO</label>
                 <Dropdown class="border flex" v-model="anoModelo" :options="anos" optionLabel="" placeholder="Selecione o Ano" required />
-
-                <!-- <InputNumber class="rounded border flex" id="name" v-model="anoModelo" :min="0" :max="2025" integeronly  required/> -->
             </div>
             <div class="field">
                 <label for="price" class="mb-3">PREÇO</label>
@@ -139,18 +163,26 @@ onMounted(() => {
             <div class="flex flex-col items-center">
             <div class="mb-4 text-center">
                 <label class="mb-4 text-xl">Opcionais</label>
-                <div class="formgrid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 justify-center mt-5">
-                <div v-for="opcional in opcionais" :key="String(opcional.id)" class="field-radiobutton col-span-1">
-                    <RadioButton v-model="opcionalSelecionado" :inputId="String(opcional.id)" name="dynamic" :value="opcional"  />
-                    <label :for="String(opcional.id)">{{opcional.nome}}</label>
-                </div>
+                <div class="flex gap-10 mt-3">
+                    <div v-for="opcional in opcionais" :key="opcional.id" class="flex align-items-center">
+                        <Checkbox v-model="opcionaisSelecionados" :inputId="String(opcional.id)" name="category" :value="opcional.id" />
+                        <label class="ml-2" :for="String(opcional.id)">{{ opcional.nome }}</label>
+                    </div>
                 </div>
             </div>
-            <Button type="submit" required rounded severity="success" label="Salvar" class="m-5 py-2 px-4 rounded border">Salvar</Button>
-            </div>
         </div>
-        <ImageUploader></ImageUploader>
-        </div>
+    </div>
+    <div class="card mt-5">
+        <Toast />
+        <FileUpload name="demo[]" url="http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php" @upload="onAdvancedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
+            <template #empty>
+                <p>Drag and drop files to here to upload.</p>
+            </template>
+        </FileUpload>
+    </div>      
+    <Button type="submit" required rounded severity="success" label="Salvar" class="m-5 py-2 px-4 rounded border">Salvar</Button>
+    <!-- <ImageUploader @select="cadastrar"></ImageUploader> -->
+</div>
     </form>
   </template>
   

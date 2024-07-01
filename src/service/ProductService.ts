@@ -1,19 +1,33 @@
-import type { Versao } from "@/types/Versao";
-
 export class ProductService {
 
-    async cadastrarVersao(body: Versao) {
-        
+    async cadastrarVersao (body) {
         const requestOptions = {
-            method: 'POST',
-            headers: {"content-type": "application/json"},
-            body: JSON.stringify(body)
-        };
-        const response = await fetch("http://localhost/revendaCarro/hmtl/src/controllers/CadastrarVersao.php", requestOptions);
-        const data = await response.json();
-        
-        return data;
+            method: "POST",
+            body: body
+        }
+        const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', requestOptions)
     }
+
+    // async cadastrarVersao(body: Cadastro, imagens: FormData) {
+    //     console.log('ESSE É O BODY CRU QUE VEM DO COMPONENTE', body)
+    //     const versao = body
+        
+    //     const requestOptions = {
+    //         method: "POST",
+    //         headers: {"Content-Type": "application/json"},
+            
+    //         // body: JSON.stringify(body)
+    //         body: {body, imagens}
+    //     };
+    //     console.log('ESSE É O BODY TRANSFORMADO EM JSON', requestOptions.body)
+
+    //     // console.log(requestOptions.body)
+    //     const response = await fetch("http://localhost/revendaCarro/hmtl/src/controllers/CadastrarVersao.php", requestOptions);
+    //     return
+    //     const data = await response.json();
+        
+    //     return data;
+    // }
     
     async buscarOpcionais() {
         const requestOptions = {

@@ -50,7 +50,7 @@ const onTemplatedUpload = async ($event: any) => {
     try {
         const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', {
             method: 'POST',
-            body: formData
+            body: formData,
         });
         console.log(response)
 

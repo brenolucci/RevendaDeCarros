@@ -1,4 +1,4 @@
-import type { Versao } from "./Versao";
+import type Versao from "./Versao";
 
 export default interface Carro {
     versao: Versao,
