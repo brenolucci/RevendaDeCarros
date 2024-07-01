@@ -36,13 +36,14 @@ const files = ref();
 const subida = ref(false)
 
 interface Event {
-    files: Array<File>,
+    files: Array<File>,   
     xhr: any
 }
 
 function onAdvancedUpload(event: Event) {
     files.value = toRaw(event.files);
     subida.value = true;
+    console.log(subida.value)
     toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
 
@@ -63,18 +64,20 @@ function contaAnos() {
 function cadastrar() {
     try{
         const formData = new FormData();
-        files.value.forEach((file: string | Blob) => {
-        formData.append('files[]', file);
-        // Append do resto do form
-        // formData.append('modelo_id', modeloSelecionado.value.id);
-        // formData.append('combustivel_id', combustivelSelecionado.value.id);
+        const modeloId = modeloSelecionado.value?.id;
+        const combustivelId = combustivelSelecionado.value?.id;
+        const opcionaisId = opcionaisSelecionados.value;
+        formData.append('modelo_id', String(modeloId));
+        formData.append('combustivel_id', String(combustivelId));
         formData.append('nome', versao.value);
         formData.append('preco', preco.value);
         formData.append('ano', ano.value);
         formData.append('ano_modelo', anoModelo.value);
         formData.append('quilometragem', String(quilometragem.value).toString());
         formData.append('localizacao', String(localizacao.value));
-        // formData.append('opcionais', opcionaisSelecionados.value);
+        formData.append('opcionais', String(opcionaisId));
+        files.value.forEach((file: string | Blob) => {
+        formData.append('files[]', file);
     });
 
      if(subida.value === false) {  
@@ -174,7 +177,7 @@ onMounted(() => {
     </div>
     <div class="card mt-5">
         <Toast />
-        <FileUpload name="demo[]" url="http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php" @upload="onAdvancedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
+        <FileUpload name="demo[]" url="http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php" @select="onAdvancedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
             <template #empty>
                 <p>Drag and drop files to here to upload.</p>
             </template>

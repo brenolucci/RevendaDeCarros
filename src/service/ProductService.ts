@@ -1,11 +1,14 @@
 export class ProductService {
 
-    async cadastrarVersao (body) {
+    async cadastrarVersao (body: FormData) {
         const requestOptions = {
             method: "POST",
             body: body
         }
         const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', requestOptions)
+        const data = await response.json();
+
+        return data;
     }
 
     // async cadastrarVersao(body: Cadastro, imagens: FormData) {
