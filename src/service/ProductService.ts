@@ -1,37 +1,15 @@
 export class ProductService {
 
     async cadastrarVersao (body: FormData) {
-        const requestOptions = {
+
+        const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', {
             method: "POST",
             body: body
-        }
-        const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', requestOptions)
-        const data = await response.json();
-
-        return data;
+        });
+            
+        return await response.json();
     }
 
-    // async cadastrarVersao(body: Cadastro, imagens: FormData) {
-    //     console.log('ESSE É O BODY CRU QUE VEM DO COMPONENTE', body)
-    //     const versao = body
-        
-    //     const requestOptions = {
-    //         method: "POST",
-    //         headers: {"Content-Type": "application/json"},
-            
-    //         // body: JSON.stringify(body)
-    //         body: {body, imagens}
-    //     };
-    //     console.log('ESSE É O BODY TRANSFORMADO EM JSON', requestOptions.body)
-
-    //     // console.log(requestOptions.body)
-    //     const response = await fetch("http://localhost/revendaCarro/hmtl/src/controllers/CadastrarVersao.php", requestOptions);
-    //     return
-    //     const data = await response.json();
-        
-    //     return data;
-    // }
-    
     async buscarOpcionais() {
         const requestOptions = {
             method: "GET",
@@ -42,6 +20,7 @@ export class ProductService {
     
         return data;
     }
+
     async buscarCombustiveis() {
         const requestOptions = {
             method: "GET",
@@ -52,6 +31,7 @@ export class ProductService {
     
         return data;
     }
+    
     async buscarVersoes() {
         const requestOptions = {
             method: "GET",

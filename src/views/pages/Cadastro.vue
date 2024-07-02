@@ -9,7 +9,6 @@ import type Marca from '@/types/Marca';
 import type Modelo from '@/types/Modelo';
 import type Combustivel from '@/types/Combustivel';
 import type Opcional from '@/types/Opcional';
-import Empty from './Empty.vue';
 
 const productService = new ProductService();
 const versoes = ref<Array<Versao>>([]);
@@ -74,17 +73,23 @@ function cadastrar() {
         formData.append('opcionais', String(opcionaisId));
 
         if(!files.value){
-        toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 6000 });
-        throw new Error("Por favor faça o upload das imagens!");
+            toast.add({ severity: "error", summary: "Erro", detail: "Faça upload das imagens!!", life: 6000 });
+            throw new Error("Por favor faça o upload das imagens!");
         }
       
-        
-        
         files.value.forEach((file: string | Blob) => {
-        formData.append('files[]', file);
-    });
-        productService.cadastrarVersao(formData);
-        toast.add({ severity: "success", summary: "Successo", detail: "Carro cadastrado!", life: 3000 });
+            formData.append('files[]', file);
+        });
+
+        productService.cadastrarVersao(formData)
+            .then(response => {
+                if (response.status === 'error') {
+                    toast.add({ severity: 'error', summary: "Ops!", detail: response.message, life: 3000 });                   
+                } else {
+                    toast.add({ severity: 'success', summary: "Successo", detail: response.message, life: 3000 });
+                }
+            });
+        
     } catch (error) {
         toast.add({ severity: "error", summary: "Erro", detail: "Houve um problema!", life: 3000 });
     }
@@ -104,71 +109,70 @@ onMounted(() => {
     <form @submit.prevent="cadastrar" >
         <div class="container mx-auto my-10 px-8 py-10 border rounded-lg shadow-lg">
         <h1 class="text-5xl font-semibold text-center mb-8">Cadastro de veículo</h1>
-        <div class="flex flex-col items-center space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="field">
-                <label for="id" class="mb-3">MARCA</label>
-                <Dropdown class="border flex" v-model="marcaSelecionada" :options="marcas" optionLabel="nome" placeholder="Selecione a Marca" @change="marcaEscolhida" required />
+        <div class="flex flex-col items-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                <div class="field">
+                    <label for="id" class="mb-3">MARCA</label>
+                    <Dropdown class="border flex" v-model="marcaSelecionada" :options="marcas" optionLabel="nome" placeholder="Selecione a Marca" @change="marcaEscolhida" required />
+                </div>
+                <div class="field">
+                    <label for="inventoryStatus" class="mb-3">MODELO</label>
+                    <Dropdown class="border flex" v-model="modeloSelecionado" :options="modelos" optionLabel="nome" placeholder="Selecione o Modelo" required>
+                    </Dropdown>
+                </div>
+                <div class="field">
+                    <label for="name" class="mb-3">VERSÃO</label>
+                    <InputText class="rounded border flex w-17rem" placeholder="1.4 MPI ELX 8V FLEX 4P MANUAL" id="name" v-model.trim="versao" autofocus :invalid="submitted && null" required/>
+                </div>
             </div>
-            <div class="field">
-                <label for="inventoryStatus" class="mb-3">MODELO</label>
-                <Dropdown class="border flex" v-model="modeloSelecionado" :options="modelos" optionLabel="nome" placeholder="Selecione o Modelo" required>
-                </Dropdown>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                <div class="field">
+                    <label for="quantity" class="mb-3">ANO DO CARRO</label>
+                    <Dropdown class="border flex" v-model="ano" :options="anos" optionLabel="" placeholder="Selecione o Ano" required />
+                </div>
+                <div class="field">
+                    <label for="name" class="mb-3">ANO DO MODELO</label>
+                    <Dropdown class="border flex" v-model="anoModelo" :options="anos" optionLabel="" placeholder="Selecione o Ano" required />
+                </div>
+                <div class="field">
+                    <label for="price" class="mb-3">PREÇO</label>
+                    <InputNumber class="rounded border flex" id="price" v-model="preco" mode="currency" currency="BRL" locale="pt-BR" :invalid="submitted && !preco" required />
+                </div>
             </div>
-            <div class="field">
-                <label for="name" class="mb-3">VERSÃO</label>
-                <InputText class="rounded border flex w-17rem" placeholder="1.4 MPI ELX 8V FLEX 4P MANUAL" id="name" v-model.trim="versao" autofocus :invalid="submitted && null" required/>
-            </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="field">
-                <label for="quantity" class="mb-3">ANO DO CARRO</label>
-                <Dropdown class="border flex" v-model="ano" :options="anos" optionLabel="" placeholder="Selecione o Ano" required />
-            </div>
-            <div class="field">
-                <label for="name" class="mb-3">ANO DO MODELO</label>
-                <Dropdown class="border flex" v-model="anoModelo" :options="anos" optionLabel="" placeholder="Selecione o Ano" required />
-            </div>
-            <div class="field">
-                <label for="price" class="mb-3">PREÇO</label>
-                <InputNumber class="rounded border flex" id="price" v-model="preco" mode="currency" currency="BRL" locale="pt-BR" :invalid="submitted && !preco" required />
-            </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="field">
-                <label for="quantity" class="mb-3">QUILOMETRAGEM</label>
-                <InputNumber class="rounded border flex" id="quantity" v-model.trim="quilometragem" suffix=" km" required />
-            </div>
-            <div class="field">
-                <label for="combustivel" class="mb-3">COMBUSTÍVEL</label>
-                <Dropdown class="border flex" v-model="combustivelSelecionado" :options="combustiveis" optionLabel="nome" placeholder="Selecione o tipo de combustível" required/>
-            </div>
-            <div class="field">
-                <label for="location" class="mb-3">LOCALIZAÇÃO</label>
-                <InputText class="rounded border flex w-17rem" id="location" v-model="localizacao" required/>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                <div class="field">
+                    <label for="quantity" class="mb-3">QUILOMETRAGEM</label>
+                    <InputNumber class="rounded border flex" id="quantity" v-model.trim="quilometragem" suffix=" km" required />
+                </div>
+                <div class="field">
+                    <label for="combustivel" class="mb-3">COMBUSTÍVEL</label>
+                    <Dropdown class="border flex" v-model="combustivelSelecionado" :options="combustiveis" optionLabel="nome" placeholder="Selecione o tipo de combustível" required/>
+                </div>
+                <div class="field">
+                    <label for="location" class="mb-3">LOCALIZAÇÃO</label>
+                    <InputText class="rounded border flex w-17rem" id="location" v-model="localizacao" required/>
+                </div>
             </div>
             <div class="flex flex-col items-center">
             <div class="mb-4 text-center">
                 <label class="mb-4 text-xl">Opcionais</label>
                 <div class="flex gap-10 mt-3">
                     <div v-for="opcional in opcionais" :key="opcional.id" class="flex align-items-center">
-                        <Checkbox v-model="opcionaisSelecionados" :inputId="String(opcional.id)" name="category" :value="opcional.id" />
-                        <label class="ml-2" :for="String(opcional.id)">{{ opcional.nome }}</label>
+                        <Checkbox v-model="opcionaisSelecionados" :inputId="`opcional-${opcional.id}`" name="category" :value="opcional.id" />
+                        <label class="ml-2" :for="`opcional-${opcional.id}`">{{ opcional.nome }}</label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="card mt-5">
+    
         <Toast />
-        <FileUpload name="demo[]" url="http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php" @select="onAdvancedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
+        <FileUpload name="demo[]" chooseLabel="Escolher imagens" accept="image/*" :showUploadButton="false" url="http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php" @select="onAdvancedUpload($event)" :multiple="true"  :maxFileSize="1000000">
             <template #empty>
                 <p>Drag and drop files to here to upload.</p>
             </template>
         </FileUpload>
-    </div>      
-    <Button type="submit" required rounded severity="success" label="Salvar" class="m-5 py-2 px-4 rounded border">Salvar</Button>
+    <Button type="submit" required rounded  label="Salvar" class="m-5 py-2 px-4 rounded border">Salvar</Button>
     <!-- <ImageUploader @select="cadastrar"></ImageUploader> -->
 </div>
     </form>
