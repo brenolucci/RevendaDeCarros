@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, toRaw } from 'vue';
+import { ref, onMounted, toRaw, watch } from 'vue';
 import Button from 'primevue/button';
 import Skyline from '@/assets/skylineR34.jpeg';
 import { ProductService } from '@/service/ProductService';
 import type Versao from '@/types/Versao';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const query = ref(route.query);
 const images = ref([]);
 const versoes = ref<Array<Versao>>();
 const productService = new ProductService();
@@ -34,8 +37,15 @@ const items = ref([
     { label: 'Nissan' }, 
 ]);
 
+watch(
+  () => route.fullPath,
+  async () => {
+    productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
+  }
+)
+
 onMounted(() => {
-    productService.buscarVersoes().then((data) => (versoes.value = data));
+    productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
 });
 
 const getSeverity = (status: string) => {

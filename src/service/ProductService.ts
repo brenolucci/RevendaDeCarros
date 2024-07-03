@@ -31,7 +31,15 @@ export class ProductService {
     
         return data;
     }
-    
+
+    async buscarVersoesFiltradas(params: string) {
+        const response = await fetch(`http://localhost/revendaCarro/hmtl/src/controllers/FiltrarVersoes.php${params}`, {
+            method: "GET",
+        });
+
+        return await response.json();
+    }
+
     async buscarVersoes() {
         const requestOptions = {
             method: "GET",
