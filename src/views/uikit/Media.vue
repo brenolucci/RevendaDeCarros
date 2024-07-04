@@ -5,6 +5,7 @@ import Skyline from '@/assets/skylineR34.jpeg';
 import { ProductService } from '@/service/ProductService';
 import type Versao from '@/types/Versao';
 import { useRoute } from 'vue-router';
+import Galleria from 'primevue/galleria';
 
 const route = useRoute();
 const query = ref(route.query);
@@ -80,8 +81,13 @@ const getSeverity = (status: string) => {
                 <div class="border-1 surface-border border-round max-w-80 m-2 ">
                     <div class="mb-3">
                         <div class="relative mx-auto">
-                            <img :src="versao.imagens[1].img_url" :alt="versao.nome" class="w-full" />
-                            <Tag :value="'INSTOCK'" :severity="true" class="absolute" style="left: 3px; top: 5px" />
+                        <Galleria :value="versao.imagens" :num-visible="6" container-style="max-width: 640px"
+                        :show-thumbnails="false" :show-indicators="true" :change-item-on-indicator-hover="true" >
+                            <template #item="slotProps">
+                                <img :src="slotProps.item.img_url"  class="w-full" />
+                            </template>
+                        </Galleria>
+                        <Tag :value="'INSTOCK'" :severity="true" class="absolute" style="left: 3px; top: 5px" />
                         </div>
                     </div>
                     <div class="p-3">
