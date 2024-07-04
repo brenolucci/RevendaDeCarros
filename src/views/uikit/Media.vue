@@ -11,6 +11,7 @@ const query = ref(route.query);
 const images = ref([]);
 const versoes = ref<Array<Versao>>();
 const productService = new ProductService();
+const totalBusca = ref<Number>();
 const carouselResponsiveOptions = ref([
     {
         breakpoint: '1024px',
@@ -40,7 +41,8 @@ const items = ref([
 watch(
   () => route.fullPath,
   async () => {
-    productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
+    await productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
+    totalBusca.value = versoes.value?.length;
   }
 )
 
@@ -70,7 +72,7 @@ const getSeverity = (status: string) => {
         <Breadcrumb class="mb-5" :home="home" :model="items" />
         <div class="mb-5 ml-5">
             <h1 class="text-xl font-semibold font" >Carros usados, seminovos e novos em Florianópolis/SC</h1>
-            <span>17.321 resultados encontrados</span>
+            <span>{{ totalBusca }} resultados encontrados</span>
         </div>
 
         <div class="grid grid-cols-5 gap-1">

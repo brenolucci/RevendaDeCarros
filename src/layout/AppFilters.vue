@@ -27,6 +27,7 @@ const opcionais = ref<Array<Opcional>>([]);
 const opcionaisSelecionados = ref<Array<number>>([]);
 const listaMarcas = ref(false);
 
+
 function debounce(func: Function, delay: number) {
   let timeout: ReturnType<typeof setTimeout>;
   return  (...args: any[]) => {
@@ -38,7 +39,7 @@ function debounce(func: Function, delay: number) {
 const updateQueryParams = debounce(() => {
   const query: LocationQueryRaw = {
     ...(ano.value && { ano: ano.value.toString() }),
-    ...(preco.value && { preco: preco.value.toString() }),
+    ...(preco.value && { preco: preco.value}),
     ...(quilometragem.value && { quilometragem: quilometragem.value.toString() }),
     ...(opcionaisSelecionados.value.length && { opcionais: opcionaisSelecionados.value.join(',') }),
     ...(localizacao.value && { localizacao: localizacao.value }),
@@ -121,7 +122,7 @@ onMounted(() => {
     <h6 class="mt-2 mb-5">Ano</h6>
     <div class="flex justify-center gap-2">
       <div>
-        <InputText type="number" v-model="ano" class="border w-full py-2 px-2" placeholder="2024" />
+        <InputText type="number" v-model="ano" class="border w-full py-2 px-2" placeholder="A partir de" />
         <small id="username-help">ex: 2014</small>
       </div>
     </div>
@@ -132,7 +133,7 @@ onMounted(() => {
     <h6 class="mt-2 mb-5">Preço</h6>
     <div class="flex justify-center gap-2">
       <div>
-        <InputText type="number" v-model="preco" class="border w-full py-2 px-2" placeholder="R$" />
+        <InputText type="number" v-model="preco" class="border w-full py-2 px-2" placeholder="Até" />
         <small id="username-help">R$ 10.000</small>
       </div>
     </div>
@@ -143,8 +144,8 @@ onMounted(() => {
     <h6 class="mt-2 mb-5">Quilometragem</h6>
     <div class="flex justify-center gap-2">
       <div>
-        <InputText type="number" v-model="quilometragem" class="border w-full py-2 px-2" placeholder="0 km" />
-        <small id="username-help">50.000</small>
+        <InputText type="number" v-model="quilometragem" class="border w-full py-2 px-2" placeholder="Até" />
+        <small id="username-help">50.000 km</small>
       </div>
     </div>
   </div>
@@ -154,8 +155,8 @@ onMounted(() => {
     <h6 class="mt-2 mb-3">Opcionais</h6>
     <div v-for="opcional in opcionais" :key="opcional.id" class="p-1">
       <div>
-        <Checkbox v-model="opcionaisSelecionados" :inputId="String(opcional.id)" name="optionals" :value="opcional.id" />
-        <label :for="String(opcional.id)" class="ml-2"> {{opcional.nome}} </label>
+        <Checkbox v-model="opcionaisSelecionados" :inputId="String(opcional.nome)" name="optionals" :value="opcional.nome" />
+        <label :for="String(opcional.nome)" class="ml-2"> {{opcional.nome}} </label>
       </div>
     </div>
   </div>
