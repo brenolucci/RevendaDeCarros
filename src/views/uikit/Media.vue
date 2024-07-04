@@ -80,7 +80,7 @@ const getSeverity = (status: string) => {
                 <div class="border-1 surface-border border-round max-w-80 m-2 ">
                     <div class="mb-3">
                         <div class="relative mx-auto">
-                            <img :src="Skyline" :alt="versao.nome" class="w-full" />
+                            <img :src="versao.imagens[1].img_url" :alt="versao.nome" class="w-full" />
                             <Tag :value="'INSTOCK'" :severity="true" class="absolute" style="left: 3px; top: 5px" />
                         </div>
                     </div>
