@@ -1,6 +1,7 @@
 import router from "@/router";
 import type User from "@/types/User";
 import axios from "axios";
+import { toRaw } from "vue";
 
 export class ProductService {
 
@@ -14,15 +15,11 @@ export class ProductService {
         return await response.json();
     }
 
-    login(body: User) {
-        axios.post('/login/route', body)
-        .then((response) => {
-            console.log('logou');
-            router.push({path: '/'});
-        })
-        .catch((errors) => {
-            console.log('falhou');
-        });
+    async login(body: any) {
+        return axios.post('http://localhost/revendaCarro/hmtl/src/controllers/Login.php', body)
+            .then((response) => {
+                console.log(response.data);
+            });
     }
 
     async buscarOpcionais() {

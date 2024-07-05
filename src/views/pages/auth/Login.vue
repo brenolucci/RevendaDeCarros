@@ -5,30 +5,42 @@ import AppConfig from '@/layout/AppConfig.vue';
 import axios from 'axios';
 import { ProductService } from '@/service/ProductService';
 
+const productService = new ProductService();
 const { layoutConfig } = useLayout();
 const nome = ref('');
 const email = ref('');
 const senha = ref('');
 const checked = ref(false);
 const user = ref({});
-// http://localhost/revendaCarro/hmtl/src/controllers/Login.php
 const logoUrl = computed(() => {
     return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
 function login(params){
-    ProductService.login(user);
+    user.value = {
+        email: email.value,
+        senha: senha.value
+    }
+    productService.login(user.value)
+    .then(response => {
+                if (response.status === 'error') {
+                    toast.add({ severity: 'error', summary: "Ops!", detail: response.message, life: 3000 });                   
+                } else {
+                    toast.add({ severity: 'success', summary: "Successo", detail: response.message, life: 3000 });
+                }
+            });
 }
 </script>
 
 <template>
+    <form  @submit.prevent="login">
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
             <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
-                        <img src="@/assets/revendaCarro-logo.jpg" alt="Image" height="80" class="rounded-full mb-3" />
+                        <img src="@/assets/revendaCarro-logo.webp" alt="Image" height="80" class="rounded-full mb-3" />
                         <div class="text-900 text-3xl font-medium mb-3">Bem vindo ao Revenda de Carros!</div>
                         <span class="text-600 font-medium">Não é cadastrado?</span>
                         <router-link to="/auth/registro" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"> Registre aqui</router-link>
@@ -47,12 +59,13 @@ function login(params){
                             </div>
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer hover:underline" style="color: var(--primary-color)">Esqueceu a senha?</a>
                         </div>
-                        <Button label="Entrar" class="w-full p-3 text-xl"></Button>
+                        <Button type="submit" label="Entrar" class="w-full p-3 text-xl"></Button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</form>
     <AppConfig simple />
 </template>
 
