@@ -1,3 +1,7 @@
+import router from "@/router";
+import type User from "@/types/User";
+import axios from "axios";
+
 export class ProductService {
 
     async cadastrarVersao (body: FormData) {
@@ -8,6 +12,17 @@ export class ProductService {
         });
             
         return await response.json();
+    }
+
+    login(body: User) {
+        axios.post('/login/route', body)
+        .then((response) => {
+            console.log('logou');
+            router.push({path: '/'});
+        })
+        .catch((errors) => {
+            console.log('falhou');
+        });
     }
 
     async buscarOpcionais() {

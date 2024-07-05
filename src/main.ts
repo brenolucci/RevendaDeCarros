@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router/index';
 
+
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';
@@ -107,14 +108,27 @@ import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 import 'primevue/resources/themes/aura-light-green/theme.css';
 
-
-
 import '@/assets/styles.scss';
 import './index.css';
+import { createStore } from 'vuex/types/index.js';
+
+const store = createStore({
+    state () {
+      return {
+        count: 0
+      }
+    },
+    mutations: {
+      increment (state) {
+        state.count++
+      }
+    }
+  })
 
 const app = createApp(App);
 
 app.use(router);
+app.use(store);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);

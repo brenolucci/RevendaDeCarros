@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
-import logoRevenda from '@/assets/revendaCarro-logo.jpg'
+import logoRevenda from '@/assets/revendaCarro-logo.webp'
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
@@ -29,6 +29,11 @@ const onSettingsClick = () => {
     topbarMenuActive.value = false;
     router.push('/documentation');
 };
+const onAddClick = () => {
+    topbarMenuActive.value = false;
+    onMenuToggle();
+    router.push('/cadastro');
+}
 const topbarMenuClasses = computed(() => {
     return {
         'layout-topbar-menu-mobile-active': topbarMenuActive.value
@@ -64,7 +69,7 @@ const isOutsideClicked = (event) => {
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img :src="logoRevenda" alt="logo" />
+            <img :src="logoRevenda" alt="logo" class="rounded-full" />
             <span>Revenda de Carros</span>
         </router-link>
 
@@ -77,6 +82,10 @@ const isOutsideClicked = (event) => {
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
+            <button @click="onAddClick()" class="p-link layout-topbar-button">
+                <i class="pi pi-plus-circle"></i>
+                <span>Cadastro</span>
+            </button>
             <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
                 <i class="pi pi-calendar"></i>
                 <span>Calendar</span>

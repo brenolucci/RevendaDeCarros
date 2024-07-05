@@ -79,7 +79,7 @@ function cadastrar() {
       
         files.value.forEach((file: string | Blob) => {
             formData.append('files[]', file);
-        });
+        }); 
 
         productService.cadastrarVersao(formData)
             .then(response => {

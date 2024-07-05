@@ -4,15 +4,18 @@ import Button from 'primevue/button';
 import Skyline from '@/assets/skylineR34.jpeg';
 import { ProductService } from '@/service/ProductService';
 import type Versao from '@/types/Versao';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Galleria from 'primevue/galleria';
+import axios from 'axios';
 
 const route = useRoute();
+const router = useRouter();
 const query = ref(route.query);
 const images = ref([]);
 const versoes = ref<Array<Versao>>();
 const productService = new ProductService();
 const totalBusca = ref<Number>();
+const user = ref({});
 const carouselResponsiveOptions = ref([
     {
         breakpoint: '1024px',
@@ -36,8 +39,9 @@ const home = ref({
 const items = ref([
     { label: 'Carros' }, 
     { label: 'Usados' }, 
-    { label: 'Nissan' }, 
+   
 ]);
+
 
 watch(
   () => route.fullPath,
@@ -117,5 +121,8 @@ const getSeverity = (status: string) => {
 <style scoped>
 .grid {
  display: grid;
+}
+.border-1 {
+    max-height: 95%;
 }
 </style>
