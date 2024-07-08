@@ -1,35 +1,36 @@
-<script setup>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import { ref, computed } from 'vue';
 import AppConfig from '@/layout/AppConfig.vue';
 import axios from 'axios';
 import { ProductService } from '@/service/ProductService';
+import { useAlertStore, useAuthStore } from '@/stores';
+import type User from '@/types/User';
+import { useToast } from 'primevue/usetoast';
 
+const alertStore = useAlertStore();
 const productService = new ProductService();
+const toast = useToast();
 const { layoutConfig } = useLayout();
+const authStore = useAuthStore();
 const nome = ref('');
 const email = ref('');
 const senha = ref('');
 const checked = ref(false);
-const user = ref({});
+const user = ref<User>({
+    email: '',
+    senha: ''
+});
+
 const logoUrl = computed(() => {
     return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
-function login(params){
-    user.value = {
-        email: email.value,
-        senha: senha.value
-    }
-    productService.login(user.value)
-    .then(response => {
-                if (response.status === 'error') {
-                    toast.add({ severity: 'error', summary: "Ops!", detail: response.message, life: 3000 });                   
-                } else {
-                    toast.add({ severity: 'success', summary: "Successo", detail: response.message, life: 3000 });
-                }
-            });
+async function login(){
+    user.value = {email: email.value, senha: senha.value};
+    await authStore.login(user.value);
 }
+
 </script>
 
 <template>

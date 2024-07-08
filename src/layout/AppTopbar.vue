@@ -3,12 +3,14 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 import logoRevenda from '@/assets/revendaCarro-logo.webp'
+import { useAuthStore } from '@/stores';
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
+const authStore = useAuthStore();
 
 onMounted(() => {
     bindOutsideClickListener();
@@ -64,6 +66,10 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
+
+async function onLogout(){
+    authStore.logout();
+}
 </script>
 
 <template>
@@ -96,6 +102,10 @@ const isOutsideClicked = (event) => {
             </button>
             <button @click="onSettingsClick()" class="p-link layout-topbar-button">
                 <i class="pi pi-cog"></i>
+                <span>Settings</span>
+            </button>
+            <button @click="onLogout()" class="p-link layout-topbar-button">
+                <i class="pi pi-sign-out"></i>
                 <span>Settings</span>
             </button>
         </div>

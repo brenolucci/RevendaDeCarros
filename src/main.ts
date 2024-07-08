@@ -107,13 +107,15 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 import 'primevue/resources/themes/aura-light-green/theme.css';
+import {createPinia} from 'pinia';
 
 import '@/assets/styles.scss';
 import './index.css';
 
+const pinia = createPinia();
 const app = createApp(App);
 
-
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);

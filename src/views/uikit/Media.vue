@@ -6,16 +6,19 @@ import { ProductService } from '@/service/ProductService';
 import type Versao from '@/types/Versao';
 import { useRoute, useRouter } from 'vue-router';
 import Galleria from 'primevue/galleria';
-import axios from 'axios';
+import { useAuthStore } from '@/stores';
+import { storeToRefs } from 'pinia';
 
 const route = useRoute();
+const authStore = useAuthStore();
+const user = storeToRefs(authStore);
 const router = useRouter();
 const query = ref(route.query);
 const images = ref([]);
 const versoes = ref<Array<Versao>>();
 const productService = new ProductService();
 const totalBusca = ref<Number>();
-const user = ref({});
+const isLoading = ref(true);
 const carouselResponsiveOptions = ref([
     {
         breakpoint: '1024px',
@@ -53,7 +56,9 @@ watch(
 
 onMounted(() => {
     productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
+    isLoading.value = true;
 });
+
 
 const getSeverity = (status: string) => {
     switch (status) {
@@ -73,7 +78,7 @@ const getSeverity = (status: string) => {
 </script>
 
 <template>
-    <div class="flex flex-col">
+    <div v-if="user" class="flex flex-col">
         <Breadcrumb class="mb-5" :home="home" :model="items" />
         <div class="mb-5 ml-5">
             <h1 class="text-xl font-semibold font" >Carros usados, seminovos e novos em Florianópolis/SC</h1>

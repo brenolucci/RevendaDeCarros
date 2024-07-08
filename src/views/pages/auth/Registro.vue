@@ -1,20 +1,44 @@
-<script setup lang=ts>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import { ProductService } from '@/service/ProductService';
 import { ref, computed } from 'vue';
+import { useUsersStore, useAlertStore} from '@/stores'
+import router from '@/router';
+import type User from '@/types/User';
 
 
+
+const usersStore = useUsersStore();
+const alertStore = useAlertStore();
 const productService = new ProductService();
 const { layoutConfig } = useLayout();
 const nome = ref('');
 const email = ref('');
 const senha = ref('');
+const usuario = ref<User>({
+    nome: '',
+    email: ''
+});
 const checked = ref(false);
 
 const logoUrl = computed(() => {
     return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
+async function registro(){
+    usuario.value = <User> {
+        nome: nome.value,
+        email: email.value,
+        senha: senha.value
+    }
+    try {
+        await usersStore.register(usuario.value);
+        await router.push('/auth/login');
+        alertStore.success('Cadastro bem sucedido!')
+    } catch (error: any) {
+        alertStore.error(error);
+    }
+}
 
 
 </script>
@@ -23,7 +47,7 @@ const logoUrl = computed(() => {
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
-            <form @submit.prevent="">
+            <form @submit.prevent="registro">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                         <div class="text-center mb-5">
