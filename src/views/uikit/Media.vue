@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, toRaw, watch } from 'vue';
 import Button from 'primevue/button';
-import Skyline from '@/assets/skylineR34.jpeg';
 import { ProductService } from '@/service/ProductService';
 import type Versao from '@/types/Versao';
 import { useRoute, useRouter } from 'vue-router';

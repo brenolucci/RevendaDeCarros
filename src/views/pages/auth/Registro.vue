@@ -17,7 +17,8 @@ const email = ref('');
 const senha = ref('');
 const usuario = ref<User>({
     nome: '',
-    email: ''
+    email: '',
+    senha: ''
 });
 const checked = ref(false);
 

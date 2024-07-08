@@ -51,7 +51,7 @@ async function login(){
                         <InputText id="email" type="text" placeholder="Email" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="email" required/>
 
                         <label for="senha" class="block text-900 font-medium text-xl mb-2">Senha</label>
-                        <Password id="senha" v-model="senha" placeholder="Senha" :toggleMask="true" class="w-full mb-3" inputClass="w-full" :inputStyle="{ padding: '1rem' }" required></Password>
+                        <Password id="senha" v-model="senha" placeholder="Senha" :feedback="false" :toggleMask="true" class="w-full mb-3" weak-label="false" inputClass="w-full" :inputStyle="{ padding: '1rem' }" required></Password>
 
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
