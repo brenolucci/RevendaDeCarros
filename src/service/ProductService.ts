@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const access_token = localStorage.getItem('user')?.replace(/["]/g, '')
+const access_token = localStorage.getItem('user')
 const headerConfig = {
     headers: {
         'Authorization':  `Bearer ${access_token}`
@@ -11,12 +11,9 @@ export class ProductService {
 
     async cadastrarVersao (body: FormData) {
 
-        const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php',  {
-            method: "POST",
-            body: body
-        });
+        const response = await axios.post('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', body, headerConfig);
             
-        return await response.json();
+        return response.data;
     }
 
     async login(body: any) {

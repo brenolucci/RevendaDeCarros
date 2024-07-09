@@ -2,10 +2,9 @@
 import { useLayout } from '@/layout/composables/layout';
 import { ref, computed } from 'vue';
 import { useAuthStore } from '@/stores';
-import type User from '@/types/User';
 import { useToast } from 'primevue/usetoast';
 import router from '@/router';
-import type { AxiosError } from 'axios';
+import type Login from '@/types/Login';
 
 const toast = useToast();
 const { layoutConfig } = useLayout();
@@ -13,9 +12,9 @@ const authStore = useAuthStore();
 const email = ref('');
 const senha = ref('');
 const checked = ref(false);
-const user = ref<User>({
+const objLogin = ref<Login>({
     email: '',
-    senha: ''
+    senha: '',
 });
 
 const logoUrl = computed(() => {
@@ -24,9 +23,13 @@ const logoUrl = computed(() => {
 
 async function login(){
     try {
-        user.value = {email: email.value, senha: senha.value};
-        await authStore.login(user.value);
-        toast.add({ severity: "success", summary: "Sucesso", detail: 'Login bem sucedido!', life: 3000 });
+
+        objLogin.value.email = email.value; 
+        objLogin.value.senha = senha.value;
+                  
+        await authStore.login(objLogin.value);
+
+        // toast.add({ severity: "success", summary: "Sucesso", detail: 'Login bem sucedido!', life: 3000 });
         router.push('/')
     } catch (error: any) {
         const e = error.response.data.message

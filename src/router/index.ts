@@ -52,7 +52,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-    const paginasPublicas = ['/auth/login'];
+    const paginasPublicas = ['/auth/login', '/auth/registro', '/auth/access'];
     const authNecessaria = !paginasPublicas.includes(to.path);
     const auth = useAuthStore();
 

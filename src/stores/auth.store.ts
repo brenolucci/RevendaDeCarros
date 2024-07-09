@@ -1,25 +1,23 @@
 import { defineStore } from 'pinia';
 import axios from 'axios'
 import router from '@/router';
-import { useAlertStore } from '@/stores';
-import type User from '@/types/User';
+import type Login from '@/types/Login';
 
 export const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
         // initialize state from local storage to enable user to stay logged in
-        user: JSON.parse(<string>localStorage.getItem('user')),
+        user: localStorage.getItem('user'),
         returnUrl: <null | string>null
     }),
     actions: {
-        async login(credentials :User) {
+        async login(credentials: Login) {
             await axios.post('http://localhost/revendaCarro/hmtl/src/controllers/Login.php', credentials).then(r => {
-                this.user = JSON.stringify(r.data.accessToken);
-                localStorage.setItem('user', this.user);
+                const token = JSON.stringify(r.data.accessToken);
+                localStorage.setItem('user', token);
             })
         },
         logout() {
-            this.user = null;
             localStorage.removeItem('user');
             router.push('/auth/login');
         }

@@ -28,15 +28,22 @@ const items = ref([
 watch(
   () => route.fullPath,
   async () => {
-    await productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
-    totalBusca.value = versoes.value?.length;
+    buscarVersoes();
   }
 )
 
 onMounted(() => {
-    productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
+    buscarVersoes();
     isLoading.value = true;
 });
+
+function buscarVersoes()
+{
+    productService.buscarVersoesFiltradas(route.fullPath).then((data) => {
+        versoes.value = data;
+        totalBusca.value = versoes.value?.length;
+    });
+}
 </script>
 
 <template>

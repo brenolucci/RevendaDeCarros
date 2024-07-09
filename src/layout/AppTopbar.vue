@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import logoRevenda from '../assets/revendaCarro-logo.webp';
 import { useAuthStore } from '@/stores';
 
-const { layoutConfig, onMenuToggle } = useLayout();
+const { onMenuToggle } = useLayout();
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
@@ -17,10 +17,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
-});
-
-const logoUrl = computed(() => {
-    return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
 const onTopBarMenuButton = () => {

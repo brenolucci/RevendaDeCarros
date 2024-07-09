@@ -92,7 +92,7 @@ function cadastrar() {
     } catch (error) {
         toast.add({ severity: "error", summary: "Erro", detail: "Houve um problema!", life: 3000 });
     }
-}
+} 
 
 onMounted(() => {
     productService.buscarVersoes().then((data: Array<Versao>) => (versoes.value = data));

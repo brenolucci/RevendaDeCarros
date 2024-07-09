@@ -19,12 +19,12 @@ watch(isSidebarActive, (newVal) => {
 
 const containerClass = computed(() => {
     return {
-        'layout-overlay': layoutConfig.menuMode.value === 'overlay',
+        // 'layout-overlay': layoutConfig.menuMode.value === 'overlay',
         'layout-static': layoutConfig.menuMode.value === 'static',
         'layout-static-inactive': layoutState.staticMenuDesktopInactive.value && layoutConfig.menuMode.value === 'static',
-        'layout-overlay-active': layoutState.overlayMenuActive.value,
+        // 'layout-overlay-active': layoutState.overlayMenuActive.value,
         'layout-mobile-active': layoutState.staticMenuMobileActive.value,
-        'p-ripple-disabled': layoutConfig.ripple.value === false
+        // 'p-ripple-disabled': layoutConfig.ripple.value === false
     };
 });
 const bindOutsideClickListener = () => {
