@@ -3,7 +3,6 @@ import { onMounted, ref, toRaw} from 'vue';
 import { ProductService } from '@/service/ProductService';
 import Button from 'primevue/button';
 import { useToast } from "primevue/usetoast";
-// import ImageUploader from '@/components/ImageUploader.vue';
 import type Versao from '@/types/Versao'
 import type Marca from '@/types/Marca';
 import type Modelo from '@/types/Modelo';
