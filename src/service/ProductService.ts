@@ -1,13 +1,17 @@
-import router from "@/router";
-import type User from "@/types/User";
 import axios from "axios";
-import { toRaw } from "vue";
+
+const access_token = localStorage.getItem('user')?.replace(/["]/g, '')
+const headerConfig = {
+    headers: {
+        'Authorization':  `Bearer ${access_token}`
+    }
+} 
 
 export class ProductService {
 
     async cadastrarVersao (body: FormData) {
 
-        const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php', {
+        const response = await fetch('http://localhost/revendaCarro/hmtl/src/Controllers/UploadImg.php',  {
             method: "POST",
             body: body
         });
@@ -45,11 +49,9 @@ export class ProductService {
     }
 
     async buscarVersoesFiltradas(params: string) {
-        const response = await fetch(`http://localhost/revendaCarro/hmtl/src/controllers/FiltrarVersoes.php${params}`, {
-            method: "GET",
-        });
+        const response = await axios.get(`http://localhost/revendaCarro/hmtl/src/controllers/FiltrarVersoes.php${params}`, headerConfig);
 
-        return await response.json();
+        return response.data;
     }
 
     async buscarVersoes() {
@@ -94,36 +96,5 @@ export class ProductService {
         const data = await response.json();
     
         return data;
-    }
-
-    getProductsSmall() {
-        return fetch('/demo/data/products-small.json', { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
-    }
-    
-
-    getProducts() {
-        return fetch('/demo/data/products.json', { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
-    }
-
-    getProductsMixed() {
-        return fetch('/demo/data/products-mixed.json', { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
-    }
-
-    getProductsWithOrdersSmall() {
-        return fetch('/demo/data/products-orders-small.json', { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
-    }
-
-    getProductsWithOrdersLarge() {
-        return fetch('/demo/data/products-orders.json', { headers: { 'Cache-Control': 'no-cache' } })
-            .then((res) => res.json())
-            .then((d) => d.data);
     }
 }

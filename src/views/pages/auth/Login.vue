@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import { ref, computed } from 'vue';
-import AppConfig from '@/layout/AppConfig.vue';
-import axios from 'axios';
-import { ProductService } from '@/service/ProductService';
-import { useAlertStore, useAuthStore } from '@/stores';
+import { useAuthStore } from '@/stores';
 import type User from '@/types/User';
 import { useToast } from 'primevue/usetoast';
+import router from '@/router';
+import type { AxiosError } from 'axios';
 
-const alertStore = useAlertStore();
-const productService = new ProductService();
 const toast = useToast();
 const { layoutConfig } = useLayout();
 const authStore = useAuthStore();
-const nome = ref('');
 const email = ref('');
 const senha = ref('');
 const checked = ref(false);
@@ -27,10 +23,16 @@ const logoUrl = computed(() => {
 });
 
 async function login(){
-    user.value = {email: email.value, senha: senha.value};
-    await authStore.login(user.value);
+    try {
+        user.value = {email: email.value, senha: senha.value};
+        await authStore.login(user.value);
+        toast.add({ severity: "success", summary: "Sucesso", detail: 'Login bem sucedido!', life: 3000 });
+        router.push('/')
+    } catch (error: any) {
+        const e = error.response.data.message
+        toast.add({ severity: "error", summary: "Erro", detail: e , life: 3000 });
+    }
 }
-
 </script>
 
 <template>
@@ -49,10 +51,8 @@ async function login(){
                     <div>
                         <label for="email" class="block text-900 text-xl font-medium mb-2">Email</label>
                         <InputText id="email" type="text" placeholder="Email" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="email" required/>
-
                         <label for="senha" class="block text-900 font-medium text-xl mb-2">Senha</label>
                         <Password id="senha" v-model="senha" placeholder="Senha" :feedback="false" :toggleMask="true" class="w-full mb-3" weak-label="false" inputClass="w-full" :inputStyle="{ padding: '1rem' }" required></Password>
-
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
                                 <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
@@ -66,8 +66,8 @@ async function login(){
             </div>
         </div>
     </div>
+    <Toast />
 </form>
-    <AppConfig simple />
 </template>
 
 <style scoped>

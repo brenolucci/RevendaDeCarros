@@ -13,17 +13,10 @@ export const useAuthStore = defineStore({
     }),
     actions: {
         async login(credentials :User) {
-            try {
-                await axios.post('http://localhost/revendaCarro/hmtl/src/controllers/Login.php', credentials).then(r => {
-                    this.user = JSON.stringify(r.data.accessToken);
-                    localStorage.setItem('user', this.user);
-                });
-                // redirect to previous url or default to home page
-                router.push(this.returnUrl || '/');
-            } catch (error: any) {
-                const alertStore = useAlertStore();
-                alertStore.error(error);
-            }
+            await axios.post('http://localhost/revendaCarro/hmtl/src/controllers/Login.php', credentials).then(r => {
+                this.user = JSON.stringify(r.data.accessToken);
+                localStorage.setItem('user', this.user);
+            })
         },
         logout() {
             this.user = null;

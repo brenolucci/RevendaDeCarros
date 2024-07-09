@@ -11,30 +11,11 @@ import { storeToRefs } from 'pinia';
 const route = useRoute();
 const authStore = useAuthStore();
 const user = storeToRefs(authStore);
-const router = useRouter();
-const query = ref(route.query);
-const images = ref([]);
 const versoes = ref<Array<Versao>>();
 const productService = new ProductService();
 const totalBusca = ref<Number>();
 const isLoading = ref(true);
-const carouselResponsiveOptions = ref([
-    {
-        breakpoint: '1024px',
-        numVisible: 3,
-        numScroll: 3
-    },
-    {
-        breakpoint: '768px',
-        numVisible: 2,
-        numScroll: 2
-    },
-    {
-        breakpoint: '560px',
-        numVisible: 1,
-        numScroll: 1
-    }
-]);
+
 const home = ref({
     icon: 'pi pi-home'
 });
@@ -43,7 +24,6 @@ const items = ref([
     { label: 'Usados' }, 
    
 ]);
-
 
 watch(
   () => route.fullPath,
@@ -57,23 +37,6 @@ onMounted(() => {
     productService.buscarVersoesFiltradas(route.fullPath).then((data) => (versoes.value = data));
     isLoading.value = true;
 });
-
-
-const getSeverity = (status: string) => {
-    switch (status) {
-        case 'INSTOCK':
-            return 'success';
-
-        case 'LOWSTOCK':
-            return 'warning';
-
-        case 'OUTOFSTOCK':
-            return 'danger';
-
-        default:
-            return null;
-    }
-};
 </script>
 
 <template>
@@ -83,7 +46,6 @@ const getSeverity = (status: string) => {
             <h1 class="text-xl font-semibold font" >Carros usados, seminovos e novos em Florianópolis/SC</h1>
             <span>{{ totalBusca }} resultados encontrados</span>
         </div>
-
         <div class="grid grid-cols-5 gap-1">
             <div v-for="versao in versoes" :key="versao.id" >
                 <div class="border-1 surface-border border-round max-w-80 m-2 ">
@@ -95,7 +57,6 @@ const getSeverity = (status: string) => {
                                 <img :src="slotProps.item.img_url"  class="w-full" />
                             </template>
                         </Galleria>
-                        <Tag :value="'INSTOCK'" :severity="true" class="absolute" style="left: 3px; top: 5px" />
                         </div>
                     </div>
                     <div class="p-3">
@@ -117,9 +78,8 @@ const getSeverity = (status: string) => {
                 </div>
             </div>
         </div>
-
-</div>
-
+    </div>
+    <Toast />
 </template>
 
 <style scoped>

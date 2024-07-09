@@ -2,11 +2,10 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
-import logoRevenda from '@/assets/revendaCarro-logo.webp'
+import logoRevenda from '../assets/revendaCarro-logo.webp';
 import { useAuthStore } from '@/stores';
 
 const { layoutConfig, onMenuToggle } = useLayout();
-
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
